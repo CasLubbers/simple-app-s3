@@ -29,6 +29,20 @@ Port-forward the service created by the helm chart.
 Now access the application via localhost:8080/files
 ## Error running native graalvm with springboot image
 Tried building a native graalvm image with springboot. But when I accessed the /files endpoint I got the following error:
-java.lang.ClassNotFoundException: software.amazon.awssdk.transfer.s3.internal.ApplyUserAgentInterceptor
+java.lang.ClassNotFoundException: software.amazon.awssdk.transfer.s3.internal.ApplyUserAgentInterceptor. I guess I missed some dependencies for AWS s3 api, but couldn't find it.
 
 Native graalvm can be build following the guide on: https://www.baeldung.com/spring-native-intro
+
+
+# Running Otomi on minikube and exposing the simple app application
+Followed the guide on: https://github.com/redkubes/quickstart/tree/main/minikube
+The metrics-server was stuck on a crashloopbackoff with a certificate error. So I allowed insecure connections with `--kubelet-insecure-tls`.
+After that Otomi would continue to deploy.
+
+I installed the simple-app-s3 with the helm command above. Then proceeded to create a service in otomi for the simple-app-s3
+
+From the drone output I saw:
+* Cert-manager created certificate resources for the host
+* Ingress object with the Nginx class was edited to add the new host pointing towards a public Istio service
+* Istio virtual service was created to route final destination, the service that was created from the helmchart
+
